@@ -81,7 +81,7 @@ async function readFrontmatterTitle(filePath) {
   }
 }
 
-async function buildDirectoryNode(relativeDir) {
+async function buildDirectoryNode(relativeDir, { isTopLevel = false } = {}) {
   const absoluteDir = path.join(DOCS_ROOT, relativeDir);
   const dirents = await readdir(absoluteDir, { withFileTypes: true });
 
@@ -98,6 +98,7 @@ async function buildDirectoryNode(relativeDir) {
   for (const directoryName of directories) {
     const child = await buildDirectoryNode(
       path.join(relativeDir, directoryName),
+      { isTopLevel: false },
     );
     if (child) {
       childNodes.push(child);
@@ -145,6 +146,7 @@ async function buildDirectoryNode(relativeDir) {
         : [
             {
               label: child.label,
+              ...(child.collapsed ? { collapsed: child.collapsed } : {}),
               items: child.items,
             },
           ],
@@ -154,6 +156,7 @@ async function buildDirectoryNode(relativeDir) {
   return {
     kind: "group",
     label: currentLabel,
+    collapsed: isTopLevel ? undefined : true,
     items,
   };
 }
@@ -167,7 +170,7 @@ async function generateSidebar() {
 
   const sections = [];
   for (const directoryName of directories) {
-    const node = await buildDirectoryNode(directoryName);
+    const node = await buildDirectoryNode(directoryName, { isTopLevel: true });
     if (!node) continue;
 
     sections.push({
