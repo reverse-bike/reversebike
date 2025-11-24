@@ -3,6 +3,7 @@ import starlight from "@astrojs/starlight";
 import { generateSidebar } from "./sidebar.mjs";
 
 const sidebar = await generateSidebar();
+const googleAnalyticsId = "G-YD683YP37S";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,6 +15,30 @@ export default defineConfig({
       logo: {
         src: "./src/assets/rs73.png",
       },
+      head: [
+        {
+          tag: "meta",
+          attrs: {
+            attrs: { property: "og:image", content: "/rs73.png" },
+          },
+        },
+        // Adding google analytics
+        {
+          tag: "script",
+          attrs: {
+            src: `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`,
+          },
+        },
+        {
+          tag: "script",
+          content: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${googleAnalyticsId}');
+                  `,
+        },
+      ],
       editLink: {
         baseUrl: "https://github.com/blopker/reversebike/edit/main/",
       },
