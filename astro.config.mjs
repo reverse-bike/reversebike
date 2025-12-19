@@ -7,7 +7,7 @@ const googleAnalyticsId = "G-YD683YP37S";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://reverse.bike",
+  site: "https://www.reverse.bike",
   integrations: [
     starlight({
       title: "Reverse Bike",
@@ -47,7 +47,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/blopker/reversebike",
+          href: "https://github.com/reverse-bike/reversebike",
         },
       ],
       sidebar,
