@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://reverse.bike/"><strong>reverse.bike</strong></a>|<a href="https://discord.gg/STvgARZYaw"><strong>Join the Discord</strong></a>
+  <a href="https://reverse.bike/"><strong>reverse.bike</strong></a> | <a href="https://discord.gg/STvgARZYaw"><strong>Join the Discord</strong></a>
 </p>
 
 ---
