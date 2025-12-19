@@ -19,7 +19,8 @@ export default defineConfig({
         {
           tag: "meta",
           attrs: {
-            attrs: { property: "og:image", content: "/rs73.png" },
+            property: "og:image",
+            content: "/rs73.png",
           },
         },
         // Adding google analytics
