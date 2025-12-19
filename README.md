@@ -52,7 +52,7 @@ To start the development server, run:
 npm run dev
 ```
 
-Your site will be available at `http://localhost:4321`.
+Your site will be available at `http://localhost:4321` (or similar).
 
 ## 🤝 Contributing
 
