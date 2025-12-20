@@ -20,7 +20,7 @@ export default defineConfig({
           tag: "meta",
           attrs: {
             property: "og:image",
-            content: "/rs73.png",
+            content: "https://www.reverse.bike/rs73-og.jpg",
           },
         },
         // Adding google analytics
