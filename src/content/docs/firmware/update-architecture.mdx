@@ -1,0 +1,467 @@
+---
+title: Firmware Update Architecture
+---
+
+## System Overview
+
+The Super73 ebike display consists of two MCUs on the display board, plus an external motor controller connected via CAN bus.
+
+Address locations on this page are for NRF version `221122`.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           DISPLAY DEVICE                                 │
+│                                                                          │
+│  ┌─────────────────────────┐      ┌─────────────────────────────────┐   │
+│  │       nRF52832          │ UART │       STM32F0xx                  │   │
+│  │    (BLE + Main CPU)     │◄────►│    (UART↔CAN Bridge)            │   │
+│  │                         │      │                                  │   │
+│  │  • BLE DFU Service      │      │  • Receives $NRF,CAN,... cmds   │   │
+│  │  • ECDSA P-256 verify   │      │  • Forwards to CAN bus          │   │
+│  │  • External SPI Flash   │      │  • Routes CAN responses back    │   │
+│  │  • Application logic    │      │                                  │   │
+│  └──────────┬──────────────┘      └──────────────┬──────────────────┘   │
+│             │ SPI                                 │                       │
+│  ┌──────────▼──────────────┐                     │                       │
+│  │    W25Q External Flash   │                     │                       │
+│  │    (Firmware storage)    │                     │                       │
+│  └──────────────────────────┘                     │                       │
+└───────────────────────────────────────────────────┼───────────────────────┘
+                                                    │ CAN BUS
+                                                    ▼
+                                     ┌──────────────────────────────┐
+                                     │      MOTOR CONTROLLER        │
+                                     │      (STM32/GD32 based)      │
+                                     │                              │
+                                     │  • Simple CAN bootloader     │
+                                     │  • NO signature verification │
+                                     │  • 8-bit checksum only       │
+                                     └──────────────────────────────┘
+```
+
+## Update Types
+
+The system supports multiple firmware update targets:
+
+| Type | Value | Target | Max Size | Stored In |
+|------|-------|--------|----------|-----------|
+| 0 | nRF App | nRF52832 application | ~200KB | Internal flash |
+| 1 | SoftDevice | Nordic BLE stack | N/A | Internal flash |
+| 2 | MCU/Controller | Motor controller | 45KB (0xB000) | External flash → CAN |
+| 3 | Both | nRF + Motor controller | Combined | Both |
+
+## DFU Package Structure
+
+Updates are delivered as signed nrfutil DFU packages containing:
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                     DFU Package (.zip)                          │
+├────────────────────────────────────────────────────────────────┤
+│  manifest.json                                                  │
+│  ├── init packet (dat file)                                    │
+│  └── firmware binary (bin file)                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Init Packet Structure
+
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0x04 | 4 | app_type | Application type flags |
+| 0x08 | 4 | hash_type | 0x20=SHA256-32, 0x40=SHA256-64, 0x80=SHA256-128 |
+| 0x0C | 1 | has_signature | Signature present flag |
+| 0x10 | 4 | signature_type | Expected: 0x34 (ECDSA P-256) |
+| 0x14 | 1 | fw_version_count | Number of compatible versions |
+| 0x18 | 4×N | fw_versions[] | Array of compatible SoftDevice IDs |
+| 0x55 | 1 | update_type | 0=nRF, 1=SD, 2=MCU, 3=Both |
+| 0x59 | 1 | target_type | Target device type |
+| 0x5A | 1 | has_mcu_size | MCU size field present |
+| 0x5C | 4 | mcu_fw_size | MCU firmware size |
+| 0x60 | 1 | has_ext_size | Extended size present |
+| 0x64 | 4 | ext_fw_size | Extended firmware size |
+| 0x68 | 1 | has_nrf_size | nRF size present |
+| 0x6C | 4 | nrf_fw_size | nRF firmware size |
+| 0x73 | 32 | fw_hash | SHA-256 hash of firmware |
+| 0x93 | 1 | init_valid | Init packet valid flag |
+| 0x94 | 1 | signature_valid | Signature validation flag |
+| 0xA1 | 1 | signature_len | ECDSA signature length |
+| 0xA2 | 64 | signature | ECDSA P-256 signature (r,s) |
+
+## Phase 1: BLE DFU Reception
+
+```
+┌──────────────┐         ┌─────────────────────────────────────────────┐
+│   Phone      │   BLE   │              nRF52 Bootloader               │
+│   nrfutil    │────────►│                                             │
+└──────────────┘         │  1. Receive init packet                     │
+                         │  2. Validate structure                      │
+                         │  3. Check SoftDevice compatibility          │
+                         │  4. Verify ECDSA P-256 signature            │
+                         │  5. Receive firmware data chunks            │
+                         │  6. Write to flash (internal or external)   │
+                         │  7. Verify hash                             │
+                         │  8. Mark as valid                           │
+                         └─────────────────────────────────────────────┘
+```
+
+### Version Compatibility Check
+
+The bootloader reads the device's SoftDevice ID from address `0x300C`:
+
+```
+Device Info (0x3000):
+┌────────┬─────────────┬────────────────────────────────┐
+│ Offset │ Value       │ Meaning                        │
+├────────┼─────────────┼────────────────────────────────┤
+│ 0x3008 │ 0x00023000  │ Application base address       │
+│ 0x300C │ 0x00A5      │ SoftDevice ID (S132 v7.0.1)    │
+│ 0x3010 │ 0x84        │ SoftDevice size (132 × 4KB)    │
+│ 0x3014 │ 5,001,000   │ FW version 5.1.0               │
+└────────┴─────────────┴────────────────────────────────┘
+
+Version format: MAJOR × 1,000,000 + MINOR × 1,000 + PATCH
+Example: 5,001,000 = version 5.1.0
+```
+
+The DFU package must include `0x00A5` in its `fw_versions[]` array to be accepted.
+
+### Signature Verification
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    ECDSA P-256 Verification                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  1. Hash init packet fields with SHA-256                            │
+│                                                                      │
+│  2. Extract signature (r, s) from init packet                       │
+│                                                                      │
+│  3. Verify using public key embedded in bootloader:                 │
+│     - Curve: NIST P-256 (secp256r1)                                │
+│     - Key location: Bootloader flash (0x7B5F4 area)                │
+│                                                                      │
+│  4. If verification fails → reject DFU                              │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+Key Functions:
+  signature_verify_init() @ 0x77648
+  ecdsa_verify()          @ 0x775b4
+  ec_scalar_mult()        @ 0x738d8
+```
+
+## Phase 2: External Flash Storage
+
+For motor controller updates (type 2), firmware is stored in external SPI flash:
+
+```
+External Flash Layout:
+┌─────────────────────────────────────────────────────────────────────┐
+│                        W25Q SPI Flash                                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Bank 0 (g_flash_bank0_addr):  Primary storage                      │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │ Header (5 bytes)                                             │   │
+│  │ ├─ Bytes 0-3: CRC32 (big-endian)                            │   │
+│  │ └─ Byte 4:    Status (0xF0=valid, 0xFE=in progress)         │   │
+│  ├─────────────────────────────────────────────────────────────┤   │
+│  │ Firmware data (raw bytes, NO signature)                      │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  Bank 1 (g_flash_bank1_addr):  Backup / MCU firmware                │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │ Header (5 bytes) + Firmware data                             │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  Bank 2 (g_flash_bank2_addr):  Update staging                       │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │ Header (8 bytes) + Firmware data                             │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### What Gets Stored vs Discarded
+
+```
+DFU Reception:
+                                          ┌─────────────────────┐
+  Init Packet ─────► Verify signature ───►│     DISCARDED       │
+  (signature,        in RAM               │  (not stored)       │
+   versions,                              └─────────────────────┘
+   hash, etc.)
+                                          ┌─────────────────────┐
+  Firmware    ─────► Write to external ──►│  STORED IN FLASH    │
+  Binary             flash                │  (raw bytes only)   │
+                                          └─────────────────────┘
+
+External flash contains:
+  ✓ Firmware size (in header)
+  ✓ Status byte (in header)
+  ✓ Raw firmware bytes
+
+  ✗ NO signature
+  ✗ NO init packet
+  ✗ NO version info
+  ✗ NO hash for re-verification
+```
+
+## Phase 3: Motor Controller Update
+
+After reboot, the nRF52 application detects pending firmware and sends it to the motor controller:
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   External  │    │   nRF52     │    │   STM32     │    │   Motor     │
+│   Flash     │    │   App       │    │   Bridge    │    │ Controller  │
+└──────┬──────┘    └──────┬──────┘    └──────┬──────┘    └──────┬──────┘
+       │                  │                  │                  │
+       │  Read header     │                  │                  │
+       │◄─────────────────│                  │                  │
+       │  (size, status)  │                  │                  │
+       │                  │                  │                  │
+       │                  │ $NRF,CAN,FILTER  │                  │
+       │                  │─────────────────►│                  │
+       │                  │                  │                  │
+       │                  │ Enter bootloader │                  │
+       │                  │─────────────────►│─────────────────►│
+       │                  │                  │    CAN 0x67F     │
+       │                  │                  │                  │
+       │                  │                  │◄─────────────────│
+       │                  │◄─────────────────│   ACK 0x5AA      │
+       │                  │                  │                  │
+       │                  │ Erase command    │                  │
+       │                  │─────────────────►│─────────────────►│
+       │                  │                  │                  │
+       │  Read firmware   │                  │                  │
+       │◄─────────────────│                  │                  │
+       │  (raw bytes)     │                  │                  │
+       │                  │                  │                  │
+       │                  │ Data chunks      │                  │
+       │                  │─────────────────►│─────────────────►│
+       │                  │ + 8-bit checksum │                  │
+       │                  │                  │                  │
+       │                  │ Jump command     │                  │
+       │                  │─────────────────►│─────────────────►│
+       │                  │                  │                  │
+```
+
+### UART Protocol (nRF52 → STM32 Bridge)
+
+```
+Standard CAN (11-bit ID):
+$NRF,5,<flags>,<id_hi>,<id_lo>,<d0>,<d1>,<d2>,<d3>,<d4>,<d5>,<d6>,<d7>*
+
+Extended CAN (29-bit ID):
+$NRF,6,<flags>,<id_b3>,<id_b2>,<id_b1>,<id_b0>,<d0>...<d7>,<checksum>*
+
+Examples:
+  $NRF,CAN,READY           - CAN bus ready check
+  $NRF,CAN,BAUD,KB,1f4*    - Set baud rate
+  $NRF,CAN,FILTER,...*     - Configure message filters
+```
+
+### CAN Protocol (STM32 Bridge → Motor Controller)
+
+**Type 1 - Standard CAN (11-bit IDs):**
+
+| Direction | CAN ID | Purpose |
+|-----------|--------|---------|
+| TX | 0x67F | Commands to motor controller |
+| RX | 0x5FF | Command responses |
+| RX | 0x5AA | Extended responses |
+
+**Type 2 - Extended CAN (29-bit IDs):**
+
+| Direction | CAN ID | Purpose |
+|-----------|--------|---------|
+| TX | 0x14830111 | Erase command |
+| TX | 0x14840111 | Init/size command |
+| TX | 0x14860111 | Data chunks |
+| TX | 0x14870111 | End/jump command |
+
+### Update State Machine
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    Motor Controller Update States                    │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  State 1: ENTER BOOTLOADER                                          │
+│     │     - Configure CAN filters for update mode                   │
+│     │     - Send bootloader entry command                           │
+│     │     - Wait for ACK (0x5AA: AA 55 2A 00 2A 00)                 │
+│     ▼                                                                │
+│  State 2: ERASE                                                      │
+│     │     - Send erase command                                       │
+│     │     - Wait for erase ACK (0x5FF: 60 1F 51 ...)               │
+│     ▼                                                                │
+│  State 3: INITIALIZE                                                 │
+│     │     - Send firmware size and metadata                         │
+│     │     - Wait for init ACK (0x5FF: 60 1F 50 ...)                │
+│     ▼                                                                │
+│  State 4: TRANSFER DATA                                              │
+│     │     - Read chunks from external flash                         │
+│     │     - Send via CAN with 8-bit checksum                        │
+│     │     - Wait for ACK after each chunk                           │
+│     │     - Retry up to 3× on failure                               │
+│     ▼                                                                │
+│  State 5: VERIFY                                                     │
+│     │     - Confirm all data sent                                   │
+│     │     - Check completion status                                 │
+│     ▼                                                                │
+│  State 6: FINALIZE                                                   │
+│           - Send jump/end command ("UEND")                          │
+│           - Motor controller boots new firmware                     │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## Security Analysis
+
+### Trust Boundaries
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │              CRYPTOGRAPHICALLY VERIFIED                      │   │
+│  │                                                               │   │
+│  │   Phone ──BLE──► nRF52 Bootloader                            │   │
+│  │                  • ECDSA P-256 signature ✓                   │   │
+│  │                  • SHA-256 hash ✓                            │   │
+│  │                  • Version compatibility ✓                   │   │
+│  │                                                               │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                              │                                       │
+│                              ▼                                       │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │              NO CRYPTOGRAPHIC VERIFICATION                   │   │
+│  │                                                               │   │
+│  │   External Flash ──► nRF52 App ──► STM32 ──► Motor Ctrl     │   │
+│  │                                                               │   │
+│  │   • Raw firmware bytes only                                  │   │
+│  │   • 8-bit additive checksum (transmission errors only)      │   │
+│  │   • No signature verification                                │   │
+│  │   • No hash verification                                     │   │
+│  │   • No anti-rollback protection                             │   │
+│  │                                                               │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Security Properties
+
+| Property | BLE→nRF52 | Flash→Motor Ctrl |
+|----------|-----------|------------------|
+| Signature verification | ✓ ECDSA P-256 | ✗ None |
+| Hash verification | ✓ SHA-256 | ✗ None |
+| Version checking | ✓ SoftDevice ID | ✗ None |
+| Anti-rollback | ✗ None | ✗ None |
+| Integrity on storage | ✗ Not re-verified | ✗ N/A |
+| Transport integrity | ✓ BLE CRC | 8-bit checksum |
+
+### Attack Vectors
+
+1. **External Flash Modification**
+   - If attacker has SPI access to external flash
+   - Can modify stored firmware after signature verification
+   - Application sends modified firmware to motor controller
+   - No detection mechanism
+
+2. **CAN Bus Injection**
+   - If attacker has CAN bus access
+   - Can send arbitrary firmware to motor controller
+   - Motor controller has no signature verification
+   - Only needs correct CAN IDs and 8-bit checksums
+
+3. **Firmware Rollback**
+   - No anti-rollback protection on any component
+   - Can flash older vulnerable firmware versions
+   - nRF52 checks SoftDevice compatibility only
+
+### Checksum Algorithm (Motor Controller)
+
+```c
+// 8-bit additive checksum - for transmission errors only
+uint8_t calculate_checksum(uint8_t* data, int len) {
+    uint16_t sum = 0;
+    for (int i = 0; i < len; i++)
+        sum += data[i];
+    return (uint8_t)sum;  // truncate to 8 bits
+}
+```
+
+## Key Functions Reference
+
+### Bootloader (0x73000 - 0x80000)
+
+| Address | Function | Purpose |
+|---------|----------|---------|
+| 0x7677c | dfu_init_packet_validate | Validate init packet and signature |
+| 0x77adc | dfu_cmd_init_handler | Process DFU init commands |
+| 0x77cd0 | dfu_cmd_data_handler | Process DFU data commands |
+| 0x781b0 | dfu_complete_handler | Finalize DFU transfer |
+| 0x775b4 | ecdsa_verify | ECDSA P-256 signature verification |
+| 0x77648 | signature_verify_init | Initialize signature verification |
+| 0x7a398 | dfu_ext_flash_write | Write firmware to external flash |
+| 0x7b03c | flash_bank_write_header | Write bank header (size + status) |
+
+### Application (0x23000 - 0x48000)
+
+| Address | Function | Purpose |
+|---------|----------|---------|
+| 0x32068 | vehicle_state_update_handler | Check for pending updates |
+| 0x3182c | motor_controller_fw_update_state_machine | Main update state machine |
+| 0x30818 | vehicle_update_handler | Handle update completion |
+| 0x30b7c | process_can_message | Process CAN responses |
+| 0x3889c | ext_flash_get_stored_info | Get stored firmware info |
+| 0x38840 | ext_flash_read_stored_data | Read firmware from flash |
+| 0x2f66c | send_nrf_protocol_message | Send CAN message via UART |
+| 0x31490 | calculate_checksum | 8-bit additive checksum |
+
+## Data Flow Summary
+
+```
+┌─────────────────┐
+│  nrfutil DFU    │
+│  Package        │
+│  (signed .zip)  │
+└────────┬────────┘
+         │ BLE
+         ▼
+┌─────────────────┐
+│  nRF52 Boot-    │──► ECDSA P-256 Signature Verify
+│  loader         │──► SHA-256 Hash Verify
+│                 │──► SoftDevice Version Check
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  External SPI   │
+│  Flash Bank     │──► Header: size + status (5-8 bytes)
+│  (W25Q series)  │──► Data: raw firmware (NO signature)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  nRF52 App      │──► Read from ext flash (no verification)
+│                 │──► State machine for CAN transfer
+└────────┬────────┘
+         │ UART ($NRF,5/6,...)
+         ▼
+┌─────────────────┐
+│  STM32 Bridge   │──► Parse ASCII protocol
+│  (on display)   │──► Convert to CAN frames
+└────────┬────────┘
+         │ CAN Bus (0x67F, 0x5FF, 0x5AA, 0x148x0111)
+         ▼
+┌─────────────────┐
+│  Motor          │──► Bootloader receives (no sig check)
+│  Controller     │──► 8-bit checksum only
+│  (STM32/GD32)   │──► Erase → Write → Jump
+└─────────────────┘
+```

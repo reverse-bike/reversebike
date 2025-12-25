@@ -1,0 +1,46 @@
+---
+title: Firmware Overview
+---
+
+This section covers our reverse engineering efforts around the various firmwares on Super73 bikes. There are 3 known chips (MCUs) that control the bike's hardware. The "Diamond" display has 2 and the motor controller has 1.
+
+## Diamond Display
+
+MCU: N52832 (Nordic N52), and SMT32f042f6
+
+The Diamond display device sits on the handlebars of Super73 ebikes. The display device has a Bluetooth interface that interacts with a phone app. The phone app is able to update settings on the Diamond, as well as get data from it about the bike. The Diamond is also contains a CAN bus interface, however the main N52832 chip communicates with the STM32 chip on the same PCB over UART to actually talk to the CAN bus.
+
+Via the CAN bus, the Diamond talks with the motor controller to change settings such as the Drive mode and Assist level. It is also able to send firmware updates to the motor controller from the phone app by using the buttonless DFU mode.
+
+The N52832 is also able to send updates to the STM chip via the DFU method. For both, it saves the firmware to an IS SPI memory chip on the Diamond PCB, then updates the STM chip over UART. See the [Update Architecture](./update-architecture) page for more details.
+
+### Known Firmwares
+
+**NRF**
+
+| Version | Models | Notes |
+|---------|--------|-------|
+|6-221122-0|R,RX|This is the "torque update" version|
+|6-210502-0|?|Older firmware|
+|5-200818-1|?|Oldest firmware|
+
+**STM**
+
+| Version | Models | Notes |
+|---------|--------|-------|
+|201015|All?|This is the only known firmware for the STM MCU|
+
+## Motor Controller
+
+MCU: GD32F103
+
+The motor controller, called EXT1, sits under the seat of the bike. Its job is to run the logic to control the motor. It takes various inputs, like throttle and speed, to determine how to apply current. The PCB itself is encased in heavy potting, so no one has detailed images of it for more analysis. The controller seems to come in a few variants depending on which model bike.
+
+This device can be updated by the Diamond Display via the CAN bus. Firmwares for this device vary based on region.
+
+### Known Firmwares
+
+| Version | Models | Notes |
+|---------|--------|-------|
+|230/310|R,RX|US Version, torque update|
+|231/410|R,RX|EU Version, torque update|
