@@ -2,7 +2,7 @@
 title: Motor Controller CAN Bus Protocol
 ---
 
-This document describes the CAN bus protocol used by the S73Rx e-bike motor controller firmware. Data was gathered from a static analysis of the motor controller firmware dump.
+This document describes the CAN bus protocol used by the S73Rx e-bike motor controller firmware. Data was gathered from a static analysis of the motor controller firmware dump version `230/310 US`.
 
 ## Overview
 
