@@ -15,11 +15,7 @@ header: 7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 * Lock and auto-apply individual settings
 * Lightweight and multi-platform
 
-[![](1fdd284147e3a2728b704f1c0513e52e2fb13c13ee14e851088ba81597712eb6.jpg)Superduper - Apps on Google PlaySuper ebike controller](https://play.google.com/store/apps/details?id=io.kbl.superduper&hl=en&gl=US)
-
-[![](b0df3f779dbdc916da809bb68a64fa297b9974d9221adb496cb536d74bf67548.png)Join the SuperDuper Controller betaAvailable on iOS](https://www.google.com/url?q=https%3A%2F%2Ftestflight.apple.com%2Fjoin%2FTl0UibRY&sa=D&sntz=1&usg=AOvVaw03ErrcSINfzL5hpKfRjYG9)
-
-[![](b48daac05916202e8440e1acc38c0f62a75a96bd41053f97690cdfaae2ff9c16.png)GitHub - blopker/superduperContribute to blopker/superduper development by creating an account on GitHub.](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Fblopker%2Fsuperduper&sa=D&sntz=1&usg=AOvVaw2BBTGXTcRMLCAVnsP_S6Rh)
+[![](b48daac05916202e8440e1acc38c0f62a75a96bd41053f97690cdfaae2ff9c16.png)GitHub - blopker/superduperContribute to blopker/superduper development by creating an account on GitHub.](https://github.com/blopker/superduper)
 
 ## [Walker73](https://github.com/AxelFougues/Walker73)
 
