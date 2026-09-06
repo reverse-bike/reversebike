@@ -29,7 +29,7 @@ header: 7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 
 [![](a61fc64733917f5efe78688b26c2aa7ff703b5dcadc9324f19d9edafec0ca316.png)Walker 73 - Apps on Google PlayOpen source e-bike dashboard, no account, no internet, no locked features!](https://play.google.com/store/apps/details?id=com.AzApps.Walker73)
 
-[![](65072604acde4a2fb01789902aab1185be28505088ce7a7178dbdf599309e197.png)GitHub - AxelFougues/Walker73: Walker73 is an alternative open-source Bluetooth dashboard for e-bikes/scooters equipped with a Comodule Diamond Display.](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2FAxelFougues%2FWalker73&sa=D&sntz=1&usg=AOvVaw2UYKIMyiRAT5QdLe04eN8V)
+[![](65072604acde4a2fb01789902aab1185be28505088ce7a7178dbdf599309e197.png)GitHub - AxelFougues/Walker73: Walker73 is an alternative open-source Bluetooth dashboard for e-bikes/scooters equipped with a Comodule Diamond Display.](https://github.com/AxelFougues/Walker73)
 
 ## [Official Super73 App](https://super73.com/pages/mobile-app)
 
@@ -41,4 +41,4 @@ header: 7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 [![](086fc16756094df035e64e89d09b7358c52e0340a549efa5322bb9f7d61feefa.jpg)SUPER73 App - Apps on Google PlayApp for Super73](https://play.google.com/store/apps/details?id=com.comodule.super)
 
 [![](d214b4a42af97c938eda360a7b11e8ed8cff6fc362933ea41767b401cde57f68.png)‎SUPER73‎The Super73 App will give you access to features such as Navigation, Tracking your rides, customizing your Dashboard, control of Lights and Pedal Assist Levels (PAS), access to Multi Class Multi Speed modes, and it provides a portal to Customer Service Support.
-\*Continued use of GPS running in the…](https://www.google.com/url?q=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Fsuper73%2Fid1513155421&sa=D&sntz=1&usg=AOvVaw3xKBX52yn3SP57ONQ8aDV-)
+\*Continued use of GPS running in the…](https://apps.apple.com/us/app/super73/id1513155421)

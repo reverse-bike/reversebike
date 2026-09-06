@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import { generateSidebar } from "./sidebar.mjs";
+import { generateSidebar } from "./sidebar";
 
 const sidebar = await generateSidebar();
 const googleAnalyticsId = "G-YD683YP37S";
@@ -8,6 +8,10 @@ const googleAnalyticsId = "G-YD683YP37S";
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.reverse.bike",
+  redirects: {
+    "/components/electrical/additional-cablesadaptors":
+      "/components/electrical/additional-cablesadapters",
+  },
   integrations: [
     starlight({
       title: "Reverse Bike",

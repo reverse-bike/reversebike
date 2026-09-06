@@ -10,7 +10,7 @@ It's a standard 12V motorcycle horn. The replacement bike's horn sounded like a 
 
 <https://www.revzilla.com/common-tread/how-motorcycle-horns-work-and-how-to-fix-them> 
 
-An adapter (see [Additional Cables/Adapters](/components/electrical/additional-cablesadaptors)) is used to connect the horn to the [12V Harness](/components/electrical/12v-harness).
+An adapter (see [Additional Cables/Adapters](/components/electrical/additional-cablesadapters)) is used to connect the horn to the [12V Harness](/components/electrical/12v-harness).
 
 ![](80a55cb9006cc1b96fb592ec1dbbee6909256fe1adf420c7c6fb594e75300db7.jpg)
 

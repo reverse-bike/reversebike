@@ -14,7 +14,7 @@ header: 1b447656108a16e1bb78d3b73731dcb6974e0231fe829677d6a92e753773ed59.jpg
 
 [Ride Modes](#ride-modes)
 
-[PAS / Pedal Assist Levels](#pas-pedal-assist-levels)
+[PAS / Pedal Assist Levels](#pas--pedal-assist-levels)
 
 [Time out](#time-out)
 

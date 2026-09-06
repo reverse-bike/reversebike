@@ -18,11 +18,11 @@ header: 7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 
 [Minimal Setup](#minimal-setup-1)
 
-[Motor adaptor](#motor-adaptor)
+[Motor adapter](#motor-adapter)
 
-[Battery adaptor](#battery-adaptor)
+[Battery adapter](#battery-adapter)
 
-[Primary Harness / Throttle adaptor](#primary-harness-throttle-adaptor)
+[Primary Harness / Throttle adapter](#primary-harness--throttle-adapter)
 
 [Tuning](#tuning)
 
@@ -93,15 +93,15 @@ Motor adapter
 
 ### Motor adapter
 
-A motor harness that will plug into [the motor's 10-pin connector](https://sites.google.com/view/super73-reverse-engineering/components/electrical/motor) on one side. On the other, it will plug into the controller's 5-pin hall sensor connector and the three green, blue, and yellow phases. A grey and a white wire (speed and thermal) won't be used.
+A motor harness that will plug into [the motor's 10-pin connector](/components/electrical/motor) on one side. On the other, it will plug into the controller's 5-pin hall sensor connector and the three green, blue, and yellow phases. A grey and a white wire (speed and thermal) won't be used.
 
 ### Battery adapter
 
-A battery harness that plugs into [the battery cradle's 6-pin connector](https://sites.google.com/view/super73-reverse-engineering/components/electrical/battery-cradle) on one side. On the other the 4 small wires are unused, the positive and negative go to the red and black ports on the controller.
+A battery harness that plugs into [the battery cradle's 6-pin connector](/components/electrical/battery-cradle) on one side. On the other the 4 small wires are unused, the positive and negative go to the red and black ports on the controller.
 
 ### Primary Harness / Throttle adapter
 
-An adapter for the primary harness. On one side it connects to [the primary harnesse's 12-pin input](https://sites.google.com/view/super73-reverse-engineering/components/electrical/primary-harness). On the other side, we only use the three throttle wires and plug them into the throttle connector on the controller. The 12-pin connector can be hard to find while 3-pin higo wires are common. You can absolutely skip the primary harness and make a simple adapter going straight to the throttle.
+An adapter for the primary harness. On one side it connects to [the primary harnesse's 12-pin input](/components/electrical/primary-harness). On the other side, we only use the three throttle wires and plug them into the throttle connector on the controller. The 12-pin connector can be hard to find while 3-pin higo wires are common. You can absolutely skip the primary harness and make a simple adapter going straight to the throttle.
 
 These three adapters are the minimum requirement to have a running setup. You can keep going with optional things like brakes, PAS, etc...  I will be updating the wiring diagram as I do.
 
