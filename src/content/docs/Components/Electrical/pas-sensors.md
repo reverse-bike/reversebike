@@ -4,14 +4,6 @@ original_url: https://www.reverse.bike/components/electrical/pas-sensors
 header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 ---
 
-[Cadence sensor](#cadence-sensor)
-
-[Cadence Sensor Failure](#cadence-sensor-failure)
-
-[Torque Sensor](#torque-sensor)
-
-[Torque sensor connector](#torque-sensor-connector)
-
 ## Cadence sensor
 
 Standard in US RX bikes.

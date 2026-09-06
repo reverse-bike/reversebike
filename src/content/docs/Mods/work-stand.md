@@ -16,7 +16,7 @@ Let's explore some maintenance and work stand options for Super73 e-bikes.
 
 ![](_images/3364138de940c0653906758e541c8e05f585401ad0b59e6c00b2edb09fcc4de5.jpg)
 
-# DIY Super73 Front Wheel Stand
+## DIY Super73 Front Wheel Stand
 
 After researching multiple commercial solutions, I decided it would be better to build than buy. I looked at several different designs and created a hybrid with my modifications.
 
@@ -37,19 +37,19 @@ A 2x4 and 2x6 and a couple of screws created a custom front wheel holder that lo
 
 ![](_images/462566de2befeb2dd78ae74c4a9cf3b122cdf1fdbb15b55806e95dcd08804002.jpg)
 
-## Cut Pieces
+### Cut Pieces
 
 This was not a precision build; I just used a circular saw.
 
 ![](_images/169b1d4f93f030fe8dce67c22ced18da5bbbc3d0dfba2b04922a4da2a5b3f9cb.jpg)
 
-## Assembled Stand
+### Assembled Stand
 
 I will probably spray paint it black at some point.
 
 ![](_images/a7159f93fe63820c3a1a94264e4089c8ba5ba3d64f7aa98bd6bfb40dae2231a3.jpg)
 
-# Donext Motorcycle Stand
+## Donext Motorcycle Stand
 
 <https://www.amazon.com/dp/B08L4NWZNX>
 
@@ -61,7 +61,7 @@ I've only used the "L Type" adapter, which are rubber and steel L-shaped holders
 
 ![](_images/021a2c1a1a7df0b8226b00b52f10ef0944c56d7437790a052ae18e75f7f78763.jpg)
 
-# Handlebar Jack
+## Handlebar Jack
 
 <https://www.handlebarjack.com/>
 
@@ -76,7 +76,7 @@ The Handlebar Jack was mentioned multiple times by various communities, and it l
 
 ![](_images/99d6ddc3c37d9d53a2aeb6f7ab819ddf74ec82cdde510022233747cdefb64155.jpg)
 
-# Blur Boundaries Bike Repair Stand
+## Blur Boundaries Bike Repair Stand
 
 <https://www.blurboundaries.com/products/bike-repair-stand-black>
 

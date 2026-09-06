@@ -4,12 +4,6 @@ original_url: https://www.reverse.bike/components/electrical/battery
 header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 ---
 
-[S & R Series "Newport"](#s--r-series-newport)
-
-[Z Series](#z-series)
-
-[K1D](#k1d)
-
 ## S & R Series "Newport"
 
 [Teardown](/teardowns/newport-teardown)

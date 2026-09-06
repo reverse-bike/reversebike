@@ -6,16 +6,6 @@ header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9
 
 [V2-3 Motor Teardown](/teardowns/v2-3-motor-teardown)
 
-[Official Power Chart](#official-power-chart)
-
-[S & R Series](#s--r-series)
-
-[Z Miami](#z-miami)
-
-[Z Adventure Series](#z-adventure-series)
-
-[K1D](#k1d)
-
 ## Official Power Chart
 
 ![](_images/264593b213dd414b29a7ec1b5864273bbba45f73ba4e4067f12472c86237cfec.png)Super73\_MotorPowerChart\_042423.pdf

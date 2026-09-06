@@ -4,16 +4,6 @@ original_url: https://www.reverse.bike/specifications/bluetooth-ble/metrics-serv
 header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 ---
 
-[Characteristics](#characteristics)
-
-[Usecase](#usecase)
-
-[Known register & notification IDs](#known-register--notification-ids)
-
-[Known register-only IDs](#known-register-only-ids)
-
-[Known writable IDs](#known-writable-ids)
-
 Service UUID: 00001554-1212-efde-1523-785feabcd123
 
 ## Characteristics

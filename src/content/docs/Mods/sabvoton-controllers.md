@@ -6,42 +6,6 @@ header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9
 
 ## Using a Sabvoton controller with stock Super73 battery and motor.
 
-[Preface](#preface)
-
-[Parts](#parts)
-
-[Minimal Setup](#minimal-setup)
-
-[Assembly](#assembly)
-
-[Wiring Diagram (WIP)](#wiring-diagram-wip)
-
-[Minimal Setup](#minimal-setup-1)
-
-[Motor adapter](#motor-adapter)
-
-[Battery adapter](#battery-adapter)
-
-[Primary Harness / Throttle adapter](#primary-harness--throttle-adapter)
-
-[Tuning](#tuning)
-
-[Sabvoton User Manual](#sabvoton-user-manual)
-
-[Sabvoton App Manual](#sabvoton-app-manual)
-
-[The Stock++ Setup](#the-stock-setup)
-
-[App Settings Clarifications](#app-settings-clarifications)
-
-[DC current and Boost current:](#dc-current-and-boost-current)
-
-[Rated phase current:](#rated-phase-current)
-
-[Max phase current:](#max-phase-current)
-
-[Protective phase current:](#protective-phase-current)
-
 # Preface
 
 In this mod, the default controller is replaced with a Sabvoton MQCON [SVMC7245](https://sabvoton.net/products/sabvoton-svmc7245-72v1500w-45a-brushless-dc-motor-programmable-controller-for-ebike-bicycle), [SVMC7260](https://sabvoton.net/products/svmc7260), or higher from the SVMC series. These controllers can run fine with the stock battery and motor, making them a nice replacement. They can also handle batteries from 36V to 72V and more powerful motors, making your bike ready for future upgrades. 

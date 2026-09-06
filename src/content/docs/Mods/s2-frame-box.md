@@ -6,18 +6,6 @@ header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9
 
 ## A large waterproof container that fits in the S2's frame.
 
-[Preface](#preface)
-
-[Parts](#parts)
-
-[Dimensions](#dimensions)
-
-[Assembly](#assembly)
-
-[Optional Steps](#optional-steps)
-
-[Air vent / Cable hole](#air-vent--cable-hole)
-
 # Preface
 
 In this mod, I make a wooden frame that fits inside the S2's frame and screws into the mounting slots. Two side panels are fitted on each side to make a large waterproof space for my custom batteries and controller.
@@ -65,15 +53,9 @@ Support plank: 32 \* 9.5 \* 1.7cm
 
 About width: Anything from 10 to 15cm will work. I chose a 15cm plank width because it's a standard minimum width for the batteries I want to fit inside. Choose your width depending on what you need. With the max 15cm width your side panels will have to be quite thin. My acrylic ones are ~4mm thick.
 
-  
-
 About mounting points: On the bottom, there are two usable screw holes, the two centered ones (the off-center back ones are right below the vertical piece and hence are unused). On the front there are four usable ones although a mudguard uses two of them so keep that in mind. On the top, all four screws are available.  I won't be talking about these in the build steps as it is up to you to choose which ones fit your needs. My setup uses the 2 bottom ones and 4 top ones.
 
-  
-
 1. Prepare the little support plank. It should sit centered between the front bend in the frame and the little fender mounting point in the back. You should make two indents for the unused off-centered screw bumps on the bike frame to slot into. This way it lies flat on the frame in the back and on the pedal shaft in the front.  This piece will NOT be attached to the main frame, it will be placed first and will allow the frame to slide in and rest on top of it. both the frame and this piece will be held in place together using the two centered bottom mounting points.
-
-  
 
 2. Cut and assemble the wood frame as detailed above, test fitting and adjusting during the whole process. On each joint, use a LOT of glue as well as 2-3 wood screws. This is to make them sturdy and waterproof. I suggest starting with the bottom piece and then the back and top since they are 90-degree angles. Once these three are assembled and test-fitted you can take proper measurements for the front diagonal which is the trickier part.
 
@@ -90,8 +72,6 @@ Copious glue
 Raw frame mounted
 
 3. Test fit the assembly. First place the small plank on the bottom. Slide the frame in from the no-chain side. The bottom mounting screws run through the frame and the small support piece.  The top and front (I do not use the front ones in my case) run through the frame only.
-
-  
 
 4. Finish the wooden parts by sanding and varnishing or painting. In my case, I applied a layer of wood glue, then spray-painted and applied wood glue again on the wooden parts for protection and water resistance.
 

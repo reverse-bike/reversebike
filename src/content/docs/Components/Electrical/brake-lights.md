@@ -4,10 +4,6 @@ original_url: https://www.reverse.bike/components/electrical/brake-lights
 header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 ---
 
-[S2 brake lights](#s2-brake-lights)
-
-[RX break light](#rx-break-light)
-
 ## S2 brake lights
 
 Modes:

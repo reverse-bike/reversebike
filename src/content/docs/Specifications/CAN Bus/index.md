@@ -7,18 +7,6 @@ original_url: https://www.reverse.bike/specifications/can-bus-content
 header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9.png
 ---
 
-## Contents
-
-[What is a CAN Bus?](#what-is-a-can-bus)
-
-[CAN-Capable Components on an S73 Bike](#can-capable-components-on-an-s73-bike)
-
-[S73 CAN Implementation](#s73-can-implementation)
-
-[CAN "Sniffing"](#can-sniffing)
-
-[S73 CAN Traffic Analysis](#s73-can-traffic-analysis)
-
 ## What is a CAN Bus?
 
 A Controller Area Network (CAN) bus provides a simple way for data-enabled components ("nodes"), typically in a vehicle or in industrial equipment, to exchange data over short distances with minimal wiring, reduced component interface cost, and without requiring any network management devices (e.g. routers).
@@ -41,8 +29,6 @@ On an S73 bike, the CAN-capable data-enabled components are:
 * [12v Accessory Module](/components/electrical/12v-module) - listens for lighting status data, converts 48v battery power to 12v and feeds power to the bike's lighting when required.
 
 All other S73 components (at the time of this writing) are not data-enabled, including the [hub motor](/components/electrical/motor), [headlight](/components/electrical/headlights), [taillight](/components/electrical/brake-lights), [horn](/components/electrical/horn), brake sw, throttle, and cadence or torque sensor.  These components are wired via analog circuits directly to one of the data-enabled components (typically the controller) which then digitizes the value or state and (generally but not always) broadcasts that info in a frame on the CAN bus.
-
-  
 
 As an example...
 
@@ -92,6 +78,5 @@ For an analysis of the data found in S73 CAN frames, see below.
 Below is a spreadsheet documenting our analysis of the various CAN bus frames used on an S73 bike.
 
 Super 73 does not provide this level (or any level, really) of documentation on their bikes, so this was reverse engineered using a CAN sniffer and making some educated guesses by observing bike actions vs resulting data changes in the CAN data.  This is a work in progress.
-
 
 [S73 CAN Traffic Analysis Sheet](https://docs.google.com/spreadsheets/d/1_4yek2lQ8dgjGym1Y8BURLcmWUYbLRsLaRuLpYjaGt8/edit?gid=1335315167#gid=1335315167)

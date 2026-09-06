@@ -1,10 +1,8 @@
 ---
-title: Hardware
+title: Bolts
 original_url: https://www.reverse.bike/components/hardware
 header: _images/6571c4d8095cb80fb65f41f7f595d9b32d5b51c28e326964ac22c9ba8f22ecb5.jpg
 ---
-
-[Dropout Plates](/components/hardware/dropout-plates)
 
 ## Bolts
 
