@@ -1,8 +1,5 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import { generateSidebar } from "./sidebar";
-
-const sidebar = await generateSidebar();
 const googleAnalyticsId = "G-YD683YP37S";
 
 // https://astro.build/config
@@ -54,7 +51,17 @@ export default defineConfig({
           href: "https://github.com/reverse-bike/reversebike",
         },
       ],
-      sidebar,
+      // Sidebar groups mirror the directory tree under src/content/docs.
+      // Directory names double as group labels, so they are title-cased.
+      sidebar: [
+        "motivation",
+        { label: "Components", items: [{ autogenerate: { directory: "Components", collapsed: true } }] },
+        { label: "Teardowns", items: [{ autogenerate: { directory: "Teardowns" } }] },
+        { label: "Specifications", items: [{ autogenerate: { directory: "Specifications", collapsed: true } }] },
+        { label: "Software", items: [{ autogenerate: { directory: "Software" } }] },
+        { label: "Diagnostics", items: [{ autogenerate: { directory: "Diagnostics" } }] },
+        { label: "Mods", items: [{ autogenerate: { directory: "Mods" } }] },
+      ],
     }),
   ],
 });

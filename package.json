@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "astro check && tsc --noEmit"
+    "test": "astro check && tsc --noEmit && astro build && node scripts/check-links.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
