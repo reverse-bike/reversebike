@@ -10,10 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/starlight": "^0.37.7",
     "astro": "^5.18.2",
     "node-addon-api": "^8.9.2",
     "node-gyp": "^12.4.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "typescript": "^5.9.3"
   }
 }
