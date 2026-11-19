@@ -8,7 +8,7 @@ header: _images/7410d34f5886f37c917f30f80b870ee60ec6feca162a11d5b28bd790ca2227b9
 
 ## Official Power Chart
 
-![](_images/264593b213dd414b29a7ec1b5864273bbba45f73ba4e4067f12472c86237cfec.png)Super73\_MotorPowerChart\_042423.pdf
+[Super73 Motor Power Chart (PDF)](/files/Super73_MotorPowerChart_042423.pdf), dated 2023-04-24 ([original source](https://cdn.shopify.com/s/files/1/1374/3231/files/Super73_MotorPowerChart_042423.pdf))
 
 ## S & R Series
 
