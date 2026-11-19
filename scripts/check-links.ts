@@ -5,6 +5,7 @@
  * it extracts root-relative links (`](/path)`) and same-page anchors
  * (`](#id)`), then checks that the target page exists in `dist` and, when a
  * fragment is present, that an element with that id exists on the page.
+ * Links with a file extension (e.g. `/files/foo.pdf`) must exist in `dist`.
  * External links are ignored. Exits non-zero if anything is broken.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
@@ -64,6 +65,15 @@ for (const file of walk(DOCS_ROOT)) {
     checked++;
 
     const [rawPath, fragment] = target.split("#");
+
+    // Static files from public/ (e.g. /files/foo.pdf) are copied to dist as-is.
+    if (rawPath && path.extname(rawPath)) {
+      if (!existsSync(path.join(DIST_ROOT, decodeURI(rawPath)))) {
+        broken.push(`${file}: ${target} (no file at ${rawPath})`);
+      }
+      continue;
+    }
+
     const urlPath = rawPath ? rawPath.replace(/\/$/, "") : ownUrl;
     const page = builtPage(urlPath);
 
